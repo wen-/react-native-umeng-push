@@ -44,16 +44,17 @@ public class UmengPushApplication extends Application {
     //开启推送
     private void enablePush() {
         mPushAgent = PushAgent.getInstance(this);
-        mPushAgent.enable(new IUmengRegisterCallback() {
+        //注册推送服务，每次调用register方法都会回调该接口
+        mPushAgent.register(new IUmengRegisterCallback() {
             @Override
-            public void onRegistered(final String s) {
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.i(TAG, "enable push, registrationId = " + s);
-                        mRegistrationId = s;
-                    }
-                });
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回device token
+                Log.d("注册",deviceToken);
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+
             }
         });
         //统计应用启动数据
