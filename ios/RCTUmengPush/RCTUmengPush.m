@@ -120,14 +120,14 @@ RCT_EXPORT_METHOD(getDeviceToken:(RCTResponseSenderBlock)callback) {
         
         UIUserNotificationSettings *userSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge|UIUserNotificationTypeSound|UIUserNotificationTypeAlert
                                                                                      categories:[NSSet setWithObject:categorys]];
-        [UMessage registerRemoteNotificationAndUserNotificationSettings:userSettings];
-        
+//        [UMessage registerRemoteNotificationAndUserNotificationSettings:userSettings];
+		
     }
     else{
         //register remoteNotification types
-        [UMessage registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge
-         |UIRemoteNotificationTypeSound
-         |UIRemoteNotificationTypeAlert];
+//        [UMessage registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge
+//         |UIRemoteNotificationTypeSound
+//         |UIRemoteNotificationTypeAlert];
     }
 #else
     
@@ -154,7 +154,7 @@ RCT_EXPORT_METHOD(getDeviceToken:(RCTResponseSenderBlock)callback) {
                                                  stringByReplacingOccurrencesOfString: @" " withString: @""];
     [UMessage registerDeviceToken:deviceToken];
 }
-
+//iOS10之前使用这个方法接收通知
 + (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [UMessage didReceiveRemoteNotification:userInfo];
     //send event
@@ -164,6 +164,11 @@ RCT_EXPORT_METHOD(getDeviceToken:(RCTResponseSenderBlock)callback) {
     else {
         [[RCTUmengPush sharedInstance] didReceiveRemoteNotification:userInfo];
     }
+}
+
+//iOS10新增：处理前台收到通知的代理方法
++(void)userNotificationCenter:(NSDictionary *)userInfo{
+	[[RCTUmengPush sharedInstance] didOpenRemoteNotification:userInfo];
 }
 
 + (void)didReceiveRemoteNotificationWhenFirstLaunchApp:(NSDictionary *)launchOptions {
