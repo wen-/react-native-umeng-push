@@ -61,6 +61,7 @@ public class UmengPushModule extends ReactContextBaseJavaModule implements Lifec
     public void getDeviceToken(Callback callback) {
 //        String registrationId = UmengRegistrar.getRegistrationId(mReactContext);
 //        callback.invoke(registrationId == null ? mPushApplication.mRegistrationId : registrationId);
+        callback.invoke(UmengPushApplication.devToken);
     }
 
     private WritableMap convertToWriteMap(UMessage msg) {

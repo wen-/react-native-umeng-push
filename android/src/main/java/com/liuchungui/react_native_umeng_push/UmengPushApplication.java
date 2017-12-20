@@ -24,7 +24,8 @@ public class UmengPushApplication extends Application {
     private UMessage tmpMessage;
     //应用退出时，打开推送通知时临时保存的事件
     private String tmpEvent;
-
+    //devtoken
+    public static String devToken;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -50,6 +51,7 @@ public class UmengPushApplication extends Application {
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
                 Log.d("注册",deviceToken);
+                devToken = deviceToken;
             }
 
             @Override
