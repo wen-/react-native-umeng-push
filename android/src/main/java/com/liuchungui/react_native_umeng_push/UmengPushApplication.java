@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UmengMessageHandler;
@@ -29,6 +30,7 @@ public class UmengPushApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        UMConfigure.init(this, null, "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
         enablePush();
     }
 
@@ -110,7 +112,7 @@ public class UmengPushApplication extends Application {
 
         //设置debug状态
         if(BuildConfig.DEBUG) {
-            mPushAgent.setDebugMode(true);
+            //mPushAgent.setDebugMode(true);
         }
         //前台不显示通知
         // mPushAgent.setNotificaitonOnForeground(false);
