@@ -18,6 +18,31 @@ var UmengPush = {
     UmengPushModule.getDeviceToken(handler);
   },
 
+  addTag(tag:String,handler: Function) {
+    UmengPushModule.addTag(tag,handler);
+  },
+
+  deleteTag(tag:String,handler: Function) {
+    UmengPushModule.deleteTag(tag,handler);
+  },
+
+  listTag(handler: Function) {
+    UmengPushModule.listTag(handler);
+  },
+
+  addAlias(tag:String,type:String,handler: Function) {
+    UmengPushModule.addAlias(tag,type,handler);
+  },
+
+  addExclusiveAlias(tag:String,type:String,handler: Function) {
+    UmengPushModule.addExclusiveAlias(tag,type,handler);
+  },
+
+  deleteAlias(tag:String,type:String,handler: Function) {
+    UmengPushModule.deleteAlias(tag,type,handler);
+  },
+
+
   didReceiveMessage(handler: Function) {
     receiveMessageSubscript = this.addEventListener(UmengPushModule.DidReceiveMessage, message => {
       //处于后台时，拦截收到的消息
