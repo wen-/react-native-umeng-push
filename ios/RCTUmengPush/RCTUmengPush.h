@@ -10,7 +10,7 @@
 #import <React/RCTBridgeModule.h>
 
 @interface RCTUmengPush : NSObject <RCTBridgeModule>
-+ (void)registerWithAppkey:(NSString *)appkey launchOptions:(NSDictionary *)launchOptions;
++ (void)initWithAppkey:(NSString *)appkey channel:(NSString *)channel;
 + (void)application:(UIApplication *)application didRegisterDeviceToken:(NSData *)deviceToken;
 + (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo;
 + (void)userNotificationCenter:(NSDictionary *)userInfo;

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "RCTUmengPush.h"
 #import "UMessage.h"
+#import "UMCommon.h"
+#import "UMConfigure.h"
 #import "RCTEventDispatcher.h"
 
 #define UMSYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
@@ -25,6 +27,141 @@ static RCTUmengPush *_instance = nil;
 
 @synthesize bridge = _bridge;
 RCT_EXPORT_MODULE()
+
+- (NSString *)checkErrorMessage:(NSInteger)code
+{
+    switch (code) {
+        case 1:
+            return @"响应出错";
+            break;
+        case 2:
+            return @"操作失败";
+            break;
+        case 3:
+            return @"参数非法";
+            break;
+        case 4:
+            return @"条件不足(如:还未获取device_token，添加tag是不成功的)";
+            break;
+        case 5:
+            return @"服务器限定操作";
+            break;
+        default:
+            break;
+    }
+    return nil;
+}
+
+- (void)handleResponse:(id  _Nonnull)responseObject remain:(NSInteger)remain error:(NSError * _Nonnull)error completion:(RCTResponseSenderBlock)completion
+{
+    if (completion) {
+        if (error) {
+            NSString *msg = [self checkErrorMessage:error.code];
+            if (msg.length == 0) {
+                msg = error.localizedDescription;
+            }
+            completion(@[@(error.code), @(remain)]);
+        } else {
+            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *retDict = responseObject;
+                if ([retDict[@"success"] isEqualToString:@"ok"]) {
+                    completion(@[@200, @(remain)]);
+                } else {
+                    completion(@[@(-1), @(remain)]);
+                }
+            } else {
+                completion(@[@(-1), @(remain)]);
+            }
+            
+        }
+    }
+}
+
+- (void)handleGetTagResponse:(NSSet * _Nonnull)responseTags remain:(NSInteger)remain error:(NSError * _Nonnull)error completion:(RCTResponseSenderBlock)completion
+{
+    if (completion) {
+        if (error) {
+            NSString *msg = [self checkErrorMessage:error.code];
+            if (msg.length == 0) {
+                msg = error.localizedDescription;
+            }
+            completion(@[@(error.code), @(remain), @[]]);
+        } else {
+            if ([responseTags isKindOfClass:[NSSet class]]) {
+                NSArray *retList = responseTags.allObjects;
+                completion(@[@200, @(remain), retList]);
+            } else {
+                completion(@[@(-1), @(remain), @[]]);
+            }
+        }
+    }
+}
+- (void)handleAliasResponse:(id  _Nonnull)responseObject error:(NSError * _Nonnull)error completion:(RCTResponseSenderBlock)completion
+{
+    if (completion) {
+        if (error) {
+            NSString *msg = [self checkErrorMessage:error.code];
+            if (msg.length == 0) {
+                msg = error.localizedDescription;
+            }
+            completion(@[@(error.code)]);
+        } else {
+            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *retDict = responseObject;
+                if ([retDict[@"success"] isEqualToString:@"ok"]) {
+                    completion(@[@200]);
+                } else {
+                    completion(@[@(-1)]);
+                }
+            } else {
+                completion(@[@(-1)]);
+            }
+            
+        }
+    }
+}
+
+RCT_EXPORT_METHOD(addTag:(NSString *)tag response:(RCTResponseSenderBlock)completion)
+{
+    [UMessage addTags:tag response:^(id  _Nonnull responseObject, NSInteger remain, NSError * _Nonnull error) {
+        [self handleResponse:responseObject remain:remain error:error completion:completion];
+    }];
+}
+
+RCT_EXPORT_METHOD(deleteTag:(NSString *)tag response:(RCTResponseSenderBlock)completion)
+{
+    [UMessage deleteTags:tag response:^(id  _Nonnull responseObject, NSInteger remain, NSError * _Nonnull error) {
+        [self handleResponse:responseObject remain:remain error:error completion:completion];
+    }];
+}
+
+RCT_EXPORT_METHOD(listTag:(RCTResponseSenderBlock)completion)
+{
+    [UMessage getTags:^(NSSet * _Nonnull responseTags, NSInteger remain, NSError * _Nonnull error) {
+        [self handleGetTagResponse:responseTags remain:remain error:error completion:completion];
+    }];
+}
+
+RCT_EXPORT_METHOD(addAlias:(NSString *)name type:(NSString *)type response:(RCTResponseSenderBlock)completion)
+{
+    [UMessage addAlias:name type:type response:^(id  _Nonnull responseObject, NSError * _Nonnull error) {
+        [self handleAliasResponse:responseObject error:error completion:completion];
+    }];
+}
+
+RCT_EXPORT_METHOD(addExclusiveAlias:(NSString *)name type:(NSString *)type response:(RCTResponseSenderBlock)completion)
+{
+    [UMessage setAlias:name type:type response:^(id  _Nonnull responseObject, NSError * _Nonnull error) {
+        [self handleAliasResponse:responseObject error:error completion:completion];
+    }];
+}
+
+RCT_EXPORT_METHOD(deleteAlias:(NSString *)name type:(NSString *)type response:(RCTResponseSenderBlock)completion)
+{
+    [UMessage removeAlias:name type:type response:^(id  _Nonnull responseObject, NSError * _Nonnull error) {
+        [self handleAliasResponse:responseObject error:error completion:completion];
+    }];
+}
 
 + (instancetype)sharedInstance {
     static dispatch_once_t onceToken;
@@ -94,58 +231,13 @@ RCT_EXPORT_METHOD(getDeviceToken:(RCTResponseSenderBlock)callback) {
     [UMessage setAutoAlert:NO];
 }
 
-+ (void)registerWithAppkey:(NSString *)appkey launchOptions:(NSDictionary *)launchOptions {
-    //set AppKey and LaunchOptions
-    [UMessage startWithAppkey:appkey launchOptions:launchOptions];
-    
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
-    if(UMSYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0"))
-    {
-        //register remoteNotification types
-        UIMutableUserNotificationAction *action1 = [[UIMutableUserNotificationAction alloc] init];
-        action1.identifier = @"action1_identifier";
-        action1.title=@"Accept";
-        action1.activationMode = UIUserNotificationActivationModeForeground;//当点击的时候启动程序
-        
-        UIMutableUserNotificationAction *action2 = [[UIMutableUserNotificationAction alloc] init];  //第二按钮
-        action2.identifier = @"action2_identifier";
-        action2.title=@"Reject";
-        action2.activationMode = UIUserNotificationActivationModeBackground;//当点击的时候不启动程序，在后台处理
-        action2.authenticationRequired = YES;//需要解锁才能处理，如果action.activationMode = UIUserNotificationActivationModeForeground;则这个属性被忽略；
-        action2.destructive = YES;
-        
-        UIMutableUserNotificationCategory *categorys = [[UIMutableUserNotificationCategory alloc] init];
-        categorys.identifier = @"category1";//这组动作的唯一标示
-        [categorys setActions:@[action1,action2] forContext:(UIUserNotificationActionContextDefault)];
-        
-        UIUserNotificationSettings *userSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge|UIUserNotificationTypeSound|UIUserNotificationTypeAlert
-                                                                                     categories:[NSSet setWithObject:categorys]];
-//        [UMessage registerRemoteNotificationAndUserNotificationSettings:userSettings];
-		
++ (void)initWithAppkey:(NSString *)appkey channel:(NSString *)channel
+{
+    SEL sel = NSSelectorFromString(@"setWraperType:wrapperVersion:");
+    if ([UMConfigure respondsToSelector:sel]) {
+        [UMConfigure performSelector:sel withObject:@"react-native" withObject:@"1.0"];
     }
-    else{
-        //register remoteNotification types
-//        [UMessage registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge
-//         |UIRemoteNotificationTypeSound
-//         |UIRemoteNotificationTypeAlert];
-    }
-#else
-    
-    //register remoteNotification types
-    [UMessage registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge
-     |UIRemoteNotificationTypeSound
-     |UIRemoteNotificationTypeAlert];
-    
-#endif
-    
-    //由推送第一次打开应用时
-    if(launchOptions[@"UIApplicationLaunchOptionsRemoteNotificationKey"]) {
-        [self didReceiveRemoteNotificationWhenFirstLaunchApp:launchOptions[@"UIApplicationLaunchOptionsRemoteNotificationKey"]];
-    }
-    
-#ifdef DEBUG
-    [UMessage setLogEnabled:YES];
-#endif
+    [UMConfigure initWithAppkey:appkey channel:channel];
 }
 
 + (void)application:(UIApplication *)application didRegisterDeviceToken:(NSData *)deviceToken {

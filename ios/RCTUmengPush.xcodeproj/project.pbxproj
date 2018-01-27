@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CB3DA3D11FE8F1BC000D13AD /* libUMessage_Sdk_1.5.0a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB3DA3D01FE8F1BC000D13AD /* libUMessage_Sdk_1.5.0a.a */; };
 		CEA4D70C1CCBD77B002E8008 /* RCTUmengPush.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEA4D70B1CCBD77B002E8008 /* RCTUmengPush.h */; };
 		CEA4D70E1CCBD77B002E8008 /* RCTUmengPush.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA4D70D1CCBD77B002E8008 /* RCTUmengPush.m */; };
 /* End PBXBuildFile section */
@@ -26,14 +25,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CB3DA3D01FE8F1BC000D13AD /* libUMessage_Sdk_1.5.0a.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUMessage_Sdk_1.5.0a.a; path = UMessage_Sdk_1.5.0a/libUMessage_Sdk_1.5.0a.a; sourceTree = "<group>"; };
-		CB3DA3D51FE8F30D000D13AD /* libUMessage_Sdk_1.5.0a.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUMessage_Sdk_1.5.0a.a; sourceTree = "<group>"; };
-		CB3DA3D61FE8F30D000D13AD /* UMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UMessage.h; sourceTree = "<group>"; };
 		CEA4D7081CCBD77B002E8008 /* libRCTUmengPush.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTUmengPush.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEA4D70B1CCBD77B002E8008 /* RCTUmengPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTUmengPush.h; sourceTree = "<group>"; };
 		CEA4D70D1CCBD77B002E8008 /* RCTUmengPush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTUmengPush.m; sourceTree = "<group>"; };
-		CEA4D7151CCBD86E002E8008 /* libUMessage_Sdk_1.2.6.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUMessage_Sdk_1.2.6.a; sourceTree = "<group>"; };
-		CEA4D7161CCBD86E002E8008 /* UMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMessage.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,7 +35,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB3DA3D11FE8F1BC000D13AD /* libUMessage_Sdk_1.5.0a.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,25 +44,13 @@
 		CB3DA3CF1FE8F1BC000D13AD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CB3DA3D01FE8F1BC000D13AD /* libUMessage_Sdk_1.5.0a.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		CB3DA3D41FE8F30D000D13AD /* UMessage_Sdk_1.5.0a */ = {
-			isa = PBXGroup;
-			children = (
-				CB3DA3D51FE8F30D000D13AD /* libUMessage_Sdk_1.5.0a.a */,
-				CB3DA3D61FE8F30D000D13AD /* UMessage.h */,
-			);
-			path = UMessage_Sdk_1.5.0a;
 			sourceTree = "<group>";
 		};
 		CEA4D6FF1CCBD77B002E8008 = {
 			isa = PBXGroup;
 			children = (
-				CB3DA3D41FE8F30D000D13AD /* UMessage_Sdk_1.5.0a */,
-				CEA4D7141CCBD86E002E8008 /* UMessage_Sdk_1.2.6 */,
 				CEA4D70A1CCBD77B002E8008 /* RCTUmengPush */,
 				CEA4D7091CCBD77B002E8008 /* Products */,
 				CB3DA3CF1FE8F1BC000D13AD /* Frameworks */,
@@ -91,15 +72,6 @@
 				CEA4D70D1CCBD77B002E8008 /* RCTUmengPush.m */,
 			);
 			path = RCTUmengPush;
-			sourceTree = "<group>";
-		};
-		CEA4D7141CCBD86E002E8008 /* UMessage_Sdk_1.2.6 */ = {
-			isa = PBXGroup;
-			children = (
-				CEA4D7151CCBD86E002E8008 /* libUMessage_Sdk_1.2.6.a */,
-				CEA4D7161CCBD86E002E8008 /* UMessage.h */,
-			);
-			path = UMessage_Sdk_1.2.6;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,7 +222,10 @@
 		CEA4D7121CCBD77B002E8008 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../react-native/React/**";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../../ios/Pods/Headers/**",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/UMessage_Sdk_1.5.0a",
@@ -264,7 +239,10 @@
 		CEA4D7131CCBD77B002E8008 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../react-native/React/**";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../../ios/Pods/Headers/**",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/UMessage_Sdk_1.5.0a",
