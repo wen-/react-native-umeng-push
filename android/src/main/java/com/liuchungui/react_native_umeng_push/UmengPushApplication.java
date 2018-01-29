@@ -20,7 +20,7 @@ public class UmengPushApplication extends Application {
     protected static final String TAG = UmengPushModule.class.getSimpleName();
     protected UmengPushModule mPushModule;
     protected String mRegistrationId;
-    protected PushAgent mPushAgent;
+    public PushAgent mPushAgent;
     //应用退出时，打开推送通知时临时保存的消息
     private UMessage tmpMessage;
     //应用退出时，打开推送通知时临时保存的事件
@@ -30,7 +30,7 @@ public class UmengPushApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        UMConfigure.init(this, null, "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
+        UMConfigure.init(this, null, null, UMConfigure.DEVICE_TYPE_PHONE, null);
         enablePush();
     }
 
