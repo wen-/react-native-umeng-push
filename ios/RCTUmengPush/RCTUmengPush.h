@@ -14,4 +14,5 @@
 + (void)application:(UIApplication *)application didRegisterDeviceToken:(NSData *)deviceToken;
 + (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo;
 + (void)userNotificationCenter:(NSDictionary *)userInfo;
++ (void)userNotificationCenterActive:(NSDictionary *)userInfo;
 @end

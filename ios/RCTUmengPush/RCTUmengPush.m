@@ -259,6 +259,10 @@ RCT_EXPORT_METHOD(getDeviceToken:(RCTResponseSenderBlock)callback) {
 }
 
 //iOS10新增：处理前台收到通知的代理方法
++(void)userNotificationCenterActive:(NSDictionary *)userInfo{
+	[[RCTUmengPush sharedInstance] didReceiveRemoteNotification:userInfo];
+}
+
 +(void)userNotificationCenter:(NSDictionary *)userInfo{
 	[[RCTUmengPush sharedInstance] didOpenRemoteNotification:userInfo];
 }

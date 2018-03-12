@@ -87,7 +87,7 @@ public class UmengPushModule extends ReactContextBaseJavaModule implements Lifec
         sendEvent(eventName, convertToWriteMap(msg));
     }
 
-    private void sendEvent(String eventName, @Nullable WritableMap params) {
+    public void sendEvent(String eventName, @Nullable WritableMap params) {
         //此处需要添加hasActiveCatalystInstance，否则可能造成崩溃
         //问题解决参考: https://github.com/walmartreact/react-native-orientation-listener/issues/8
         if(mReactContext.hasActiveCatalystInstance()) {
