@@ -47,6 +47,7 @@ public class UmengPushApplication extends Application {
     //开启推送
     private void enablePush() {
         mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.setNotificaitonOnForeground(false);
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
             @Override
